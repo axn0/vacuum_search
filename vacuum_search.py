@@ -165,12 +165,17 @@ class VacuumPlanning(Problem):
         
     def findMinEuclidDist(self, pos):
         """find min Euclidean dist to any of the dirty rooms 
-        hint: Use distance_euclid() in utils.py"""
-        print("findMinEuclidDist: to be done by students.")
+        hint: Use distance_squared() in utils.py"""
+        # print("findMinEuclidDist: to be done by students.")
+        # print(" Your code goes here\n")
         minDist = math.inf
-        print(" Your code goes here\n")
+        for dirt in self.env.dirtyRooms:
+            dist = distance_squared(pos, dirt)
+            if dist < minDist:
+                minDist = dist
+        return minDist
 
-        return 0
+
     def h(self, node):
         """ Return the heuristic value for a given state. For this problem use minimum Manhattan
         distance to a dirty room, among all the dirty rooms.
@@ -178,7 +183,8 @@ class VacuumPlanning(Problem):
         """
         # print("h(heuristic): to be defined and implemented by students.")
         # print(" Your code goes here\n")
-        heur = self.findMinManhattanDist(node.state)
+        # heur = self.findMinManhattanDist(node.state)
+        heur = self.findMinEuclidDist(node.state)
         return heur
 
 def agent_label(agt):
