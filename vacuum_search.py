@@ -140,7 +140,7 @@ class VacuumPlanning(Problem):
         state2 via action, assuming it costs c to get up to state1. For our problem state is (x, y) coordinate pair. 
         Rotation of the Vacuum machine costs equivalent of 0.5 unit for each 90' rotation. """
         # print("path_cost: to be done by students")
-        cost = curNode.path_cost
+        cost = curNode.path_cost + 1
         # print("Your code goes here.\n")
         
         return cost
@@ -154,12 +154,14 @@ class VacuumPlanning(Problem):
         """use distance_manhattan() function to find the min distance between position pos and any of the dirty rooms.
         Dirty rooms which are maintained in env.dirtyRooms.
         """
-        print("findMinManhattanDist: to be done by students.")
+        # print("findMinManhattanDist: to be done by students.")
+        # print(" Your code goes here\n")
         minDist = math.inf  # initialize with no minimum distance found
-        print(" Your code goes here\n")
-
-      	
-        return 0
+        for dirt in self.env.dirtyRooms:
+            dist = distance_manhattan(pos, dirt)
+            if dist < minDist:
+                minDist = dist
+        return minDist
         
     def findMinEuclidDist(self, pos):
         """find min Euclidean dist to any of the dirty rooms 
@@ -174,10 +176,9 @@ class VacuumPlanning(Problem):
         distance to a dirty room, among all the dirty rooms.
         hint: 
         """
-        print("h(heuristic): to be defined and implemented by students.")
-        heur = 0
-
-        print(" Your code goes here\n")
+        # print("h(heuristic): to be defined and implemented by students.")
+        # print(" Your code goes here\n")
+        heur = self.findMinManhattanDist(node.state)
         return heur
 
 def agent_label(agt):

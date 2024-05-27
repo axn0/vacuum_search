@@ -8,6 +8,7 @@ functions.
 
 import sys
 from collections import deque  # doubly ended queue
+import heapq
 
 from utils import *
 
@@ -155,15 +156,20 @@ def breadth_first_graph_search(problem):
     # print("breadth_first_graph_search:\n Your code goes here.")
 
     node = Node(problem.initial)
-    frontier = deque([node])  # nodes to be explored, FIFO queue: pop left, append right
-    explored = set()  # nodes already explored
+    frontier = deque([node])
+    explored = set()
+
     while frontier:
         n = frontier.popleft()  # check next node in the queue (leftmost)
-        explored.add(tuple(n.state))
         if problem.goal_test(n.state):
             return n, explored
+        else:
+            explored.add(tuple(n.state))
         for child in n.expand(problem):
-            if tuple(child.state) not in explored and child not in frontier:
+            s = child.state
+            if problem.goal_test(s):
+                return child, explored
+            if tuple(s) not in explored and child not in frontier:
                 frontier.append(child)
     return None, None
 
@@ -181,25 +187,26 @@ def depth_first_graph_search(problem):
         check if goal test
         add children to stack
     """
-    node = Node(problem.initial)  # FIFO queue
-    if problem.goal_test(node.state):
-        return node, None
     # print("depth_first_graph_search:\n Your code goes here.")
+    node = Node(problem.initial)  # FIFO queue
+    frontier = deque([node])
+    explored = set()
 
-    frontier = deque([node])    # nodes to be explored, LIFO stack: pop right, append right
-    explored = set()    # nodes already explored
     while frontier:
-        n = frontier.pop()  # check next node (right most)
+        n = frontier.pop()  # check right most node
         explored.add(tuple(n.state))
         if problem.goal_test(n.state):
             return n, explored
         for child in n.expand(problem):
+            s = child.state
+            if problem.goal_test(s):
+                return child, explored
             if tuple(child.state) not in explored and child not in frontier:
                 frontier.append(child)
     return None, None
 
 
-def best_first_graph_search(problem, f=None):
+def best_first_graph_search(problem, fn=None):
     """Search the nodes with the lowest f scores first.
     You specify the function f(node) that you want to minimize; for example,
     if f is a heuristic estimate to the goal, then we have greedy best
@@ -207,12 +214,27 @@ def best_first_graph_search(problem, f=None):
     There is a subtlety: the line "f = memoize(f, 'f')" means that the f
     values will be cached on the nodes as they are computed. So after doing
     a best first search you can examine the f values of the path returned."""
-    f = memoize(f or problem.h, 'f')
+
+    #print("best_first_graph_search: Your code goes here")
+    f = memoize(fn or problem.h, 'f')
     node = Node(problem.initial)
-    print("best_first_graph_search: Your code goes here")
+    frontier = PriorityQueue('min', f)
+    frontier.append(node)
+    explored = {tuple(problem.initial): node}
 
-
-
+    while frontier:
+        problem.node = frontier.pop()
+        if problem.goal_test(problem.node.state):
+            return problem.node, explored
+        explored[tuple(problem.node.state)] = problem.node
+        for child in problem.node.expand(problem):
+            s = child.state
+            if tuple(s) not in explored.keys() and child not in frontier:
+                frontier.append(child)
+            elif child in frontier:
+                if f(child) < frontier[child]:
+                    del frontier[child]
+                    frontier.append(child)
     return None, None
 
 
