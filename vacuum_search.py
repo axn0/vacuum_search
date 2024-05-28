@@ -140,15 +140,52 @@ class VacuumPlanning(Problem):
         state2 via action, assuming it costs c to get up to state1. For our problem state is (x, y) coordinate pair. 
         Rotation of the Vacuum machine costs equivalent of 0.5 unit for each 90' rotation. """
         # print("path_cost: to be done by students")
-        cost = curNode.path_cost + 1
         # print("Your code goes here.\n")
-        
+
+        cost = curNode.path_cost
+        if self.env.costFunc == 'Step':
+            cost = cost + 1
+        elif self.env.costFunc == 'StepTurn':
+            cost = cost + self.computeTurnCost(curNode.action, action)
+        elif self.env.costFunc == 'StayLeft':
+            cost = cost + self.stayLeft(action)
+        elif self.env.costFunc == 'StayTop':
+            cost = cost + self.stayTop(action)
+
         return cost
 
     def computeTurnCost(self, action1, action):
-        print("computeTurnCost: to be done by students")
-        print(" Your code goes here\n")
-        return 0
+        # print("computeTurnCost: to be done by students")
+        # print(" Your code goes here\n")
+
+        turn_options = {
+            "UP": {"UP": 0, "RIGHT": 0.5, "DOWN": 1, "LEFT": 0.5},
+            "RIGHT": {"UP": 0.5, "RIGHT": 0, "DOWN": 0.5, "LEFT": 1},
+            "DOWN": {"UP": 1, "RIGHT": 0.5, "DOWN": 0, "LEFT": 0.5},
+            "LEFT": {"UP": 0.5, "RIGHT": 1, "DOWN": 0.5, "LEFT": 0}
+        }
+        if (action1 is None) or (action is None):
+            return 0
+        else:
+            return turn_options[action1][action]
+
+    def stayLeft(self, action):
+        turn_options = {
+            "LEFT": 0,
+            "RIGHT": 1,
+            "UP": 1,
+            "DOWN": 1
+        }
+        return turn_options[action]
+
+    def stayTop(self, action):
+        turn_options = {
+            "LEFT": 1,
+            "RIGHT": 1,
+            "UP": 0,
+            "DOWN": 1
+        }
+        return turn_options[action]
 
     def findMinManhattanDist(self, pos):
         """use distance_manhattan() function to find the min distance between position pos and any of the dirty rooms.
@@ -183,9 +220,10 @@ class VacuumPlanning(Problem):
         """
         # print("h(heuristic): to be defined and implemented by students.")
         # print(" Your code goes here\n")
-        # heur = self.findMinManhattanDist(node.state)
-        heur = self.findMinEuclidDist(node.state)
-        return heur
+        if args['heuristic'] == 'Euclid':
+            return self.findMinEuclidDist(node.state)
+        else:
+            return self.findMinManhattanDist(node.state)
 
 def agent_label(agt):
     """creates a label based on direction"""
