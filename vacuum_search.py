@@ -164,28 +164,29 @@ class VacuumPlanning(Problem):
             "DOWN": {"UP": 1, "RIGHT": 0.5, "DOWN": 0, "LEFT": 0.5},
             "LEFT": {"UP": 0.5, "RIGHT": 1, "DOWN": 0.5, "LEFT": 0}
         }
-        if (action1 is None) or (action is None):
+        act = turn_options.get(action1, 0)
+        if act == 0:
             return 0
         else:
-            return turn_options[action1][action]
+            return act.get(action, 0)
 
     def stayLeft(self, action):
         turn_options = {
-            "LEFT": 0,
+            "LEFT": -1,
             "RIGHT": 1,
-            "UP": 1,
-            "DOWN": 1
+            "UP": 0,
+            "DOWN": 0
         }
-        return turn_options[action]
+        return turn_options.get(action, 0)
 
     def stayTop(self, action):
         turn_options = {
-            "LEFT": 1,
-            "RIGHT": 1,
-            "UP": 0,
+            "LEFT": 0,
+            "RIGHT": 0,
+            "UP": -1,
             "DOWN": 1
         }
-        return turn_options[action]
+        return turn_options.get(action, 0)
 
     def findMinManhattanDist(self, pos):
         """use distance_manhattan() function to find the min distance between position pos and any of the dirty rooms.

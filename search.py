@@ -206,7 +206,7 @@ def depth_first_graph_search(problem):
     return None, None
 
 
-def best_first_graph_search(problem, fn=None):
+def best_first_graph_search(problem, f=None):
     """Search the nodes with the lowest f scores first.
     You specify the function f(node) that you want to minimize; for example,
     if f is a heuristic estimate to the goal, then we have greedy best
@@ -216,7 +216,7 @@ def best_first_graph_search(problem, fn=None):
     a best first search you can examine the f values of the path returned."""
 
     #print("best_first_graph_search: Your code goes here")
-    f = memoize(fn or problem.h, 'f')
+    f = memoize(f or problem.h, 'f')
     node = Node(problem.initial)
     frontier = PriorityQueue('min', f)
     frontier.append(node)
