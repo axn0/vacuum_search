@@ -9,13 +9,13 @@ EXAMPLES:
 >python vacuum_search.py
 >- starts an interactive game
 >
->(2) python vacuum_search.py -s A*
+>python vacuum_search.py -s A*
 >- perform A* search to clean all rooms
 >
->(3)  python vacuum_search.py -s Greedy -r Manhattan
+>python vacuum_search.py -s Greedy -r Manhattan
 >- perform greedy algorithm search with Manhattan cost function
 >
->(4) python vacuum_search.py -s UCS -c StayTop
+>python vacuum_search.py -s UCS -c StayTop
 >- perform uniform cost search while preferentially searching the top
 
 The detailed description of each option is described in function readCommand() in script vacuum_search.py. 
