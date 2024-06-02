@@ -5,7 +5,6 @@ This project uses various search algorithms to intelligently search the environm
 The agent can be launched from command line as following:
 >python vacuum_search.py -s searchType -c costFunction -r heuristic -n (corners)
 
-USAGE:      python vacuum_search.py <options>  
 EXAMPLES:
 >python vacuum_search.py
 >- starts an interactive game
