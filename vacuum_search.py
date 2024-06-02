@@ -149,7 +149,7 @@ class VacuumPlanning(Problem):
             cost = cost + self.computeTurnCost(curNode.action, action)
         elif self.env.costFunc == 'StayLeft':
             cost = cost + self.stayLeft(action)
-        elif self.env.costFunc == 'StayTop':
+        elif self.env.costFunc == 'StayTop' or self.env.costFunc == 'StayUp':
             cost = cost + self.stayTop(action)
 
         return cost
